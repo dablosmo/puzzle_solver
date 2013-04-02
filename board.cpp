@@ -59,9 +59,9 @@ Board::Board(int size, int numInitMoves, int seed )
       tiles_[blankLoc] = tiles_[randNeighbor];
       tiles_[randNeighbor] = 0;
       blankLoc = randNeighbor;
-      blankLoc_ = blankLoc;
     }
-  }
+  } 
+  blankLoc_ = blankLoc;
 }
 
 
@@ -73,19 +73,20 @@ Board::Board()
 /** Copy constructor that performs a deep copy */
 Board::Board(const Board &b)
 {
-  tiles_ = new int[size_]; 
+  size_ = b.getSize();
+  blankLoc_ = b.getblankLoc();
+  tiles_ = new int[size_];  
   for(int i=0; i<b.size_; i++) 
   {
     tiles_[i] = (b.tiles_)[i];
   }
-  size_ = b.getSize(); 
-  blankLoc_ = b.getblankLoc();
 }
 
 /** Another kind of "copy" constructor, Makes a board with input tiles and size */
 
 Board::Board(int *tiles, int size)
 {
+  size_ = size;
   tiles_ = new int[size_]; 
   for(int i=0; i<size_; i++) 
   {
@@ -94,8 +95,7 @@ Board::Board(int *tiles, int size)
     {
       blankLoc_ = i; 
     } 
-  }
-  size_ = size; 
+  } 
 }
 
 /** Default destructor. Deletes the tile data */

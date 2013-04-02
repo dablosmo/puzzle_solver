@@ -26,16 +26,16 @@ PuzzleSolver::~PuzzleSolver()
 
 int PuzzleSolver::run(PuzzleHeuristic *ph)
 {
+  vector<PuzzleMove*> garbage;
   map<int, Board*> moveMap;
   map<int, Board*>::iterator it;
-  vector<PuzzleMove*> garbage;
   PMMinList openList;
   BoardSet closedList;
   BoardSet::iterator set_it;
+  bool boardClosed = false;
   Board* boardMaker = new Board(b_);
   PuzzleMove* move = new PuzzleMove(b_);
   PuzzleMove* moveMaker;
-  bool boardClosed = false;
   
   move->h_ = ph->calc( (move->b_->getTiles()), (move->b_->getSize()) );
   

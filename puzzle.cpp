@@ -7,6 +7,7 @@
 #include "board.h"
 #include "puzzle_heur.h"
 #include "puzzle_solver.h"
+#include "pmminlist.h"
 
 using namespace std;
 
@@ -39,6 +40,7 @@ int main(int argc, char *argv[])
 
   //**** Implement the gameplay here
   
+  ManhattanHeuristic selectHeuristic;
   int selectTile = -100; 
   while (true) 
   {
@@ -65,31 +67,48 @@ int main(int argc, char *argv[])
       continue; 
     } 
     
-    try
+    /// If the user wants to cheat 
+    if (selectTile == -1) 
     {
-      b.move(selectTile); 
+      PuzzleSolver solver(b); 
+      solver.run(&selectHeuristic); 
+      cout << "Try this sequence: "; 
+      for (int i=(solver.getSolution())->size(); i>0; i--) 
+      {
+        cout << (*(solver.getSolution()))[i-1] << " "; 
+      } 
+      cout << endl; 
+      cout << "(Expansions = " << solver.getNumExpansions() << ")" <<endl; 
       cout << endl; 
     } 
-    catch(invalid_argument &i)
-    {
-      cerr << i.what() << endl;
-      cout<<endl; 
-      continue; 
-    } 
-    catch(exception &e) 
-    {
-      cerr << "Tile is not next to a blank. Enter a valid tile that is adjacent to the blank" << endl; 
-      cout << endl; 
-      continue; 
-    }
     
-    if (b.solved()) 
+    else
     {
-      cout << b; 
-      cout << "You did it!" << endl; 
-      break; 
+      try
+      {
+        b.move(selectTile); 
+        cout << endl; 
+      } 
+      catch(invalid_argument &i)
+      {
+        cerr << i.what() << endl;
+        cout<<endl; 
+        continue; 
+      } 
+      catch(exception &e) 
+      {
+        cerr << "Tile is not next to a blank. Enter a valid tile that is adjacent to the blank" << endl; 
+        cout << endl; 
+        continue; 
+      }
+    
+      if (b.solved()) 
+      {
+        cout << b; 
+        cout << "You did it!" << endl; 
+        break; 
+      } 
     } 
-  } 
-  
+  }
   return 0;
 }
