@@ -4,6 +4,7 @@
 #include <set>
 #include <cmath>
 #include <cstdlib>
+#include <stdexcept>
 #include "board.h"
 using namespace std;
 
@@ -58,7 +59,7 @@ Board::Board(int size, int numInitMoves, int seed )
       tiles_[blankLoc] = tiles_[randNeighbor];
       tiles_[randNeighbor] = 0;
       blankLoc = randNeighbor;
-      blankLoc = blankLoc_;
+      blankLoc_ = blankLoc;
     }
   }
 }
@@ -106,49 +107,70 @@ Board::~Board()
 /** Swaps the blank with the specified tile */
 void Board::move(int tile)
 {
+  int tileIndex = -100; 
+  
+  ///Go through Board to find the index of selected tile 
+  for(int i = 0; i < size_; i++)
+  {
+    if(tiles_[i] == tile)
+    {
+      tileIndex = i;
+      break;
+    }
+  } 
+  
+  ///Error handling in case the tile was not found on the board. 
+  if(tileIndex == -100) 
+  {
+    throw invalid_argument("Tile is not on the board"); 
+  } 
+  
+  ///Check to see if tile is adjacent to the blank tile 
+  ///makes the direction where tiles do not exist invalid by making them negative.
   int dim = static_cast<int>(sqrt(size_));
-  int tileIndex;
-  for(int i=0; i<size_; i++) 
+  int n = blankLoc_ - dim;
+  int e = blankLoc_ + 1;
+  int s = blankLoc_ + dim;
+  int w = blankLoc_ - 1;
+  
+  ///Check blocks left, right and below of blank space to see if they exist. 
+  ///Checking the block above is unnecessary because if the blank is on the top row then blankLoc - dim is negative.
+  ///Check Right
+  if (e % dim == 0)
   {
-    if(tile_[i] == tile) 
-    {
-      tileIndex = i; 
-    }
+    e = -1; 
   }
-  if(tile_[tileIndex-dim] == 0)
+  ///Check Below
+  if (s >= size_)
   {
-    tile_[tileIndex-dim] = tile_[tileIndex];
-    tile_[tileIndex] = 0;
+    s = -1;
   }
-  else if(tile_[tileIndex-1] == 0)
+  ///Check Left
+  if (blankLoc_ % dim == 0)
   {
-    if(tileIndex % dim != 0)
-    {
-      tile_[tileIndex-1] = tile_[tileIndex];
-      tile_[tileIndex] = 0;
-    }
+    w = -1;
   }
-  else if(tile_[tileIndex+dim] == 0)
+  
+  ///Utilize values of n, e, s, and w to see if the index of the selected tile is next to blank or not.
+  ///If it isn't then an exception is thrown. 
+  ///This is to prevent the valid between the blank that is in the far right and a tile to the right of it.
+  if ((tileIndex != n) && (tileIndex != e) && (tileIndex != s) && (tileIndex != w)) 
   {
-      tile_[tileIndex+dim] = tile_[tileIndex];
-      tile_[tileIndex] = 0;
-  }
-  else if(tile_[tileIndex+1] == 0)
-  {
-    if(tileIndex % dim != dim-1)
-    {
-      tile_[tileIndex+1] = tile_[tileIndex];
-      tile_[tileIndex] = 0;
-    }
-  }
-} 
+    throw exception(); 
+  } 
+  
+  ///swap the location of the blank with the selected tile 
+  tiles_[blankLoc_] = tile;
+  tiles_[tileIndex] = 0;
+  blankLoc_ = tileIndex;
+}
 
  /** Generate potential moves and returns new boards
    * Key=tile, Value=Ptr to corresponding Board */
 std::map<int, Board*> Board::potentialMoves()
 {
   map<int, Board*> moves; 
-  int dim = static_cast<int(sqrt(size_)); 
+  int dim = static_cast<int>(sqrt(size_));
   Board* makeBoard; 
   
   ///utilize similar code as constructor to check if tiles exist adjecent to blank space. 
@@ -200,7 +222,7 @@ bool Board::solved()
 {
   for(int i=0; i<size_; i++) 
   {
-    if(i != tiles_[i])) 
+    if(i != (tiles_[i])) 
     {
       return false; 
     } 
@@ -210,7 +232,7 @@ bool Board::solved()
 
 ///Overload operator << so that it prints out the board. 
 ///Added accomodations of space in case the tile numbers get too large.
-friend std::ostream& Board::operator<<(std::ostream &os, const Board &b)
+ostream& operator<<(std::ostream &os, const Board &b)
 {
   int dim = static_cast<int>(sqrt(b.getSize())); 
   int width; 
