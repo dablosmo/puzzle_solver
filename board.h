@@ -37,19 +37,22 @@ class Board
 
   // Operators
   friend std::ostream& operator<<(std::ostream &os, const Board &b);
+  Board& operator=(const Board &rhs);
   bool operator==(const Board& rhs) const;
   bool operator<(const Board& rhs) const;
   bool operator!=(const Board& rhs) const;
   
   // Accessors
-  int* getTiles();
-  int getSize();
+  int* getTiles() const; 
+  int getSize() const;
+  int getblankLoc() const;
   // Add any accessors
 
 
  private:
   int *tiles_;
   int size_;
+  int blankLoc_;
   // Add Data members
 
 };
