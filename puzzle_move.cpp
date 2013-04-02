@@ -10,7 +10,7 @@ PuzzleMove::PuzzleMove(Board &b)
   b_ = new Board(b);
   prev_ = NULL;
   g_ = 0;
-  h_ = calculator.compute(b_->getTiles(), b_->getSize());
+  h_ = calculator.calc(b_->getTiles(), b_->getSize());
 }
 
 PuzzleMove::PuzzleMove(int tile, Board *b, PuzzleMove *parent)
@@ -20,7 +20,7 @@ PuzzleMove::PuzzleMove(int tile, Board *b, PuzzleMove *parent)
   b_ = b; 
   prev_ = parent; 
   g_ = prev_->g_+1; 
-  h_ = calculator.compute(b_->getTiles(), b_->getSize());
+  h_ = calculator.calc(b_->getTiles(), b_->getSize());
 }
 
 PuzzleMove::~PuzzleMove() 
