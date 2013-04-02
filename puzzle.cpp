@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
 
   //**** Implement the gameplay here
   
-  OutOfPlaceHeuristic selectHeuristic;
+  ManhattanHeuristic selectHeuristic;
   int selectTile = -100; 
   while (true) 
   {
