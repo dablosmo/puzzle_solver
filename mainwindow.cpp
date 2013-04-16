@@ -230,5 +230,23 @@ void MainWindow::Quit(){
 }
 
 
+void MainWindow::manhattan() { 
+  PuzzleSolver solver(*(pw->getBoard())); 
+  PuzzleHeuristic* heur = new ManhattanHeuristic();
+  solver.run(heur); 
+  for(int i = (solver.getSolution())->size(); i>0; i--)
+  {
+    solutionList->addItem(QString::number(solver.getSolution()->at(i-1))); 
+  }
+}
 
+void MainWindow::outofplace() { 
+  PuzzleSolver solver(*(pw->getBoard())); 
+  PuzzleHeuristic* heur = new OutOfPlaceHeuristic();
+  solver.run(heur); 
+  for(int i = (solver.getSolution())->size(); i>0; i--)
+  {
+    solutionList->addItem(QString::number(solver.getSolution()->at(i-1))); 
+  }
+}
 
