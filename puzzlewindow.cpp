@@ -75,6 +75,10 @@ void PuzzleWindow::setParent(MainWindow *mw)
 ///Move tile function that allows user to click on a tile and have it slide over to its correct position
 void PuzzleWindow::moveTile(GUITile *tile)
 {
+    if(currentboard->solved() == true) 
+    { 
+      return; 
+    }
     int dim = static_cast<int>(sqrt(currentboard->getSize()));
     int blankLoc = currentboard->getblankLoc();
     int tileLoc;
@@ -110,9 +114,8 @@ void PuzzleWindow::moveTile(GUITile *tile)
        
        if(currentboard->solved() == true) 
        { 
-         parent->getErrorList()->setPlainText("You solved the puzzle!"); 
-       }
-       
+         parent->getErrorList()->setPlainText("You solved the puzzle!                      Adjust the inputs and press Start Game to play again."); 
+       }  
     }
     ///Exception handling for clicking on tiles that are not supposed to be able to move.
     catch (exception &e)
