@@ -22,6 +22,7 @@ class GUITile : public QGraphicsRectItem
     int height;
     int velocityX;
     int velocityY;
+    bool moving;
 
   public:
     GUITile();
@@ -41,6 +42,8 @@ class GUITile : public QGraphicsRectItem
     PuzzleWindow* getParent() const;
     QGraphicsSimpleTextItem* getTiletext() const;
     void updateText();
+    bool getMoving();
+    void setMoving(bool m);
     
     void mousePressEvent(QGraphicsSceneMouseEvent *event);
     //void move(int windowMaxX, int windowMaxY );

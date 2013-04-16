@@ -17,6 +17,7 @@ GUITile::GUITile(PuzzleWindow *cw, int tilenum, double nx, double ny, double w, 
     QGraphicsRectItem(nx, ny, w, h) {
     parent = cw;
     tilenumber = tilenum;
+    moving = false;
     x = nx;
     y = ny;
     width = w;
@@ -31,15 +32,12 @@ GUITile::GUITile(PuzzleWindow *cw, int tilenum, double nx, double ny, double w, 
     memcpy(tempchar, temp.c_str(), temp.size());
     QString str = tempchar;
     tiletext = new QGraphicsSimpleTextItem(str, this);
-    //QBrush greenBrush(Qt::green);
-    //tiletext->setBrush( greenBrush );
-    
-    //tiletext->setText(str);
+    tiletext->setPos(x + width/3, y + height/4);
     tiletext->setZValue(1);
-    //tiletext->setParentItem( this );
-    //tiletext->update(x, (y+(height/2)), width, height/2);
-    QBrush blueBrush(Qt::blue);
-    this->setBrush( blueBrush );
+    
+    tiletext->setParentItem( this );
+    QBrush whiteBrush(Qt::white);
+    this->setBrush( whiteBrush );
 }
 
 GUITile::~GUITile()
@@ -67,8 +65,7 @@ void GUITile::setVelocityY( int vy ) {
     velocityY = vy;
 }
 
-/*
-void GUITile::move( int windowMaxX, int windowMaxY ) {
+/*void GUITile::move( int windowMaxX, int windowMaxY ) {
     //We move by adding the velocity to the current position.
     //Then we test whether we have reached the edge of our moving space
     //If so, we reverse the velocity (y-velocity when we hit the top/bottom and
@@ -97,15 +94,13 @@ void GUITile::move( int windowMaxX, int windowMaxY ) {
          y+=velocityY;
     }
 
-
     //Everything is good. Update the QRectF that is actually displayed.
     QPointF p( x, y );
     QRectF r( rect() );
     r.moveTo(p);
     setRect( r );
 
-}
-*/
+} */
 
 
 int GUITile::getX() const {
@@ -136,15 +131,26 @@ void GUITile::setY(int ny) {
     y = ny;
 }
 
-void GUITile::mousePressEvent(QGraphicsSceneMouseEvent *event)
-{
-    parent->moveTile( this );
+bool GUITile::getMoving() {
+    return moving;
 }
+
+void GUITile::setMoving(bool m) {
+    moving = m;
+}
+
+void GUITile::mousePressEvent(QGraphicsSceneMouseEvent *)
+{
+    if (!moving) {
+      parent->moveTile( this );
+    }
+}  
 
 GUITile& GUITile::operator=(const GUITile& rhs)
 {
     parent = rhs.getParent();
     tilenumber = rhs.getTile();
+    moving = false;
     x = rhs.getX();
     y = rhs.getY();
     width = rhs.getWidth();
@@ -159,17 +165,11 @@ GUITile& GUITile::operator=(const GUITile& rhs)
     memcpy(tempchar, temp.c_str(), temp.size());
     QString str = tempchar;
     tiletext = new QGraphicsSimpleTextItem(str, this);
-    //QBrush greenBrush(Qt::green);
-    //tiletext->setBrush( greenBrush );
     
-    //tiletext->setText(str);
+
     tiletext->setZValue(1);
-    //tiletext->setParentItem( this );
-    //tiletext->update(x, (y+(height/2)), width, height/2);
-    QBrush blueBrush(Qt::blue);
-    this->setBrush( blueBrush );
-    //cout << temp << endl;
-    //cout << tempchar << endl;
+    QBrush whiteBrush(Qt::white);
+    this->setBrush( whiteBrush );
     return *this;
 }
 

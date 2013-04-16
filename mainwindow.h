@@ -14,6 +14,8 @@
 #include <QLineEdit>
 #include <QRadioButton>
 #include <QListWidget>
+#include <QTextEdit>
+#include <string>
 
 #include "puzzlewindow.h"
 #include "board.h"
@@ -24,26 +26,40 @@ public:
     MainWindow();
     ~MainWindow();
     
-    Board* getBoard();
+    QTextEdit* getErrorList();
     
 private: 
     PuzzleWindow* pw;  
     QMenu* file; 
-    QAction* quit;
-    QAction* startGame; 
-    QAction* cheat;
+    
+    QPushButton* quitButton;
+    QPushButton* startGame; 
+    QPushButton* cheatButton;
+    
     QLineEdit* sizeBox;
     QLineEdit* moveBox;
     QLineEdit* seedBox;
+    
     QListWidget* solutionList;
+    QTextEdit* errorList;
+    
     QRadioButton* manbutton;
     QRadioButton* oopbutton;
+    
+    int puzzleSize; 
+    int numScrambles; 
+    int Seed;
+    bool startgame;
     
 
 public slots: 
     void Start();
     void Cheat();
     void Quit();
+    void manhattan(); 
+    void outofplace();
+    void handleToggle();
+    void handleToggle1();
 };
 
 #endif // MainWindow_H

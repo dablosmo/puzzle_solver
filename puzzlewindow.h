@@ -8,6 +8,12 @@
 #include <QTimer>
 #include <QTimeLine>
 #include <QGraphicsItemAnimation>
+#include <QPushButton> 
+#include <QMenuBar> 
+#include <QLineEdit> 
+#include <QRadioButton> 
+#include <QListWidget>
+#include <QTextEdit>
 
 #include "board.h"
 #include "GUITile.h"
@@ -23,10 +29,12 @@ class PuzzleWindow : public QGraphicsView {
     Q_OBJECT
     
 public:
-    explicit PuzzleWindow();
+    explicit PuzzleWindow(int size, int scrambles, int seed);
     ~PuzzleWindow();
     void setParent(MainWindow *mw);
     void moveTile(GUITile* tile);
+    void animateTile();
+    Board* getBoard();
 
     
 private:
@@ -34,17 +42,21 @@ private:
     QGraphicsScene *scene;
     Board *currentboard;
     GUITile **guiboard;
+    QTimer *timer;
+    double initx;
+    double inity; 
+    int xdist; 
+    int ydist; 
+    GUITile* currentTile; 
+    
     //QGraphicsView *view;
-    //QTimer *timer;
     //QTimer *secondtimer;
     //BouncingRectangle *item;
     //QPushButton *button;
     //vector<BouncingRectangle*> list;
 
 public slots:
-    //void handleTimer();
-    //void buttonControl();
-    //void spawnRectangle();
+    void handleTimer();
 
 };
 
