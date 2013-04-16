@@ -194,5 +194,8 @@ void MainWindow::Start(){
   }
 }
 
+void MainWindow::Quit(){ 
+  exit(EXIT_FAILURE);
+}
 
 
