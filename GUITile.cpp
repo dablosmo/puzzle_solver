@@ -148,6 +148,7 @@ GUITile& GUITile::operator=(const GUITile& rhs)
     return *this;
 }
 
+///Makes sure the tile moves with the tile
 void GUITile::updateText()
 {
     tiletext->update(x, (y+(height/2)), width, height/2);
