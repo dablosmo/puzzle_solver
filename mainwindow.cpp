@@ -236,9 +236,7 @@ void MainWindow::manhattan() {
   solver.run(heur); 
   for(int i = (solver.getSolution())->size(); i>0; i--)
   {
-  
-    solutionList->addItem(QString::number(solver.getSolution()->at(i-1))); 
-    
+    solutionList->addItem(QString::number(solver.getSolution()->at(i-1)));  
   }
 }
 
@@ -248,9 +246,7 @@ void MainWindow::outofplace() {
   solver.run(heur); 
   for(int i = (solver.getSolution())->size(); i>0; i--)
   {
-  
     solutionList->addItem(QString::number(solver.getSolution()->at(i-1))); 
-    
   }
 }
 
