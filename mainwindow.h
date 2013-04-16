@@ -26,6 +26,7 @@ public:
     MainWindow();
     ~MainWindow();
     
+    /** Retrieves the error list so other classes can access it and add messages to it */
     QTextEdit* getErrorList();
     
 private: 
@@ -53,12 +54,20 @@ private:
     
 
 public slots: 
+    /** Allows the start game button to actually create a board and have it display in the middle of the mainwindow with all the
+    user specified options */
     void Start();
+    /** Allows users to find the solution to the puzzle when pressing the cheat button and selecting which heuristic to use */
     void Cheat();
+    /** Quit game function that activates when the quit button is pressed */
     void Quit();
+    /** Utilizes the puzzle solver and puzzle heuristic class to find the solutions to the current puzzle and prints it out to the solution List Widget */
     void manhattan(); 
+    /** Same as manhattan() except it utilizes the out of place heuristic */
     void outofplace();
+    /** Function that allows only one of the radio buttons to be active at one time */
     void handleToggle();
+    /** Same as hantleToggle(). Each one makes it so that when one is toggled, the other is shut off*/
     void handleToggle1();
 };
 

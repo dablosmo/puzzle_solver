@@ -18,8 +18,8 @@
 #include "board.h"
 #include "GUITile.h"
 
-#define WINDOW_MAX_X 150
-#define WINDOW_MAX_Y 150
+#define WINDOW_MAX_X 250
+#define WINDOW_MAX_Y 250
 
 using namespace std;
 
@@ -29,11 +29,19 @@ class PuzzleWindow : public QGraphicsView {
     Q_OBJECT
     
 public:
+    ///Default Constructor 
+    PuzzleWindow();
+    ///Constructor
     explicit PuzzleWindow(int size, int scrambles, int seed);
+    ///Destructor
     ~PuzzleWindow();
+    ///Sets the parent of this class to mainwindow. Allows access to some of mainwindow's functions
     void setParent(MainWindow *mw);
+    ///Function that allows the tile to move when its clicked on
     void moveTile(GUITile* tile);
+    ///Used to animate the tile and slide to its correct location after it is clicked on
     void animateTile();
+    ///Returns the current puzzle board
     Board* getBoard();
 
     
@@ -48,14 +56,10 @@ private:
     int xdist; 
     int ydist; 
     GUITile* currentTile; 
-    
-    //QGraphicsView *view;
-    //QTimer *secondtimer;
-    //BouncingRectangle *item;
-    //QPushButton *button;
-    //vector<BouncingRectangle*> list;
+
 
 public slots:
+    ///Handle timer is used to make sure that the tile stops in the right place
     void handleTimer();
 
 };

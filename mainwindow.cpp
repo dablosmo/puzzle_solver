@@ -21,7 +21,14 @@
 
 using namespace std; 
 
+/** Constructs the user interface with various areas where the user can input game options. 
+User can choose size of the puzzle, number of times it is scrambled, and seed. 
+They also have the option to cheat using either the Manhattan Heuristic or the Out of Place heuristic.
+*/
+
 MainWindow::MainWindow() { 
+
+  pw = new PuzzleWindow();
 
   setCorner(Qt::TopLeftCorner, Qt::LeftDockWidgetArea);
   setCorner(Qt::TopRightCorner, Qt::RightDockWidgetArea);
@@ -129,7 +136,7 @@ MainWindow::MainWindow() {
   
   solutionList = new QListWidget();
  
-  QDockWidget* solutions = new QDockWidget("Solutions", this);
+  QDockWidget* solutions = new QDockWidget("Solution", this);
   solutions->setAllowedAreas(Qt::BottomDockWidgetArea);
   solutions->setWidget(solutionList);
   addDockWidget(Qt::BottomDockWidgetArea, solutions);
@@ -137,11 +144,10 @@ MainWindow::MainWindow() {
   
   ///Puzzleboard in central widget, blank at start
   
-  QWidget* BlankWidget = new QWidget(); 
-  BlankWidget->setFixedSize(300,220);
-  setCentralWidget(BlankWidget);
+  //QWidget* BlankWidget = new QWidget(); 
+  //BlankWidget->setFixedSize(300,220);
+  setCentralWidget(pw);
   
-  //initialize
   startgame = false;
 }
 
@@ -149,16 +155,27 @@ MainWindow::~MainWindow() {
   
 }
 
+/**
+  Get errorList function so subclass can add error messages to the message box.
+*/
 QTextEdit* MainWindow::getErrorList() {
   return errorList; 
   errorList->clear();
 }
 
+/**
+  Starts the game when the startgame button is pressed and all of the game options are valid.
+*/
 void MainWindow::Start(){
+  ///start game variable keeps track of whether there is a game in progress or not
   startgame = true;
+  
+  ///Retrieve the information that the user input into the text boxes
   QString size = sizeBox->text();
   QString move = moveBox->text(); 
   QString seed = seedBox->text(); 
+  
+  ///Change retrieved information into ints
   string ssize = size.toUtf8().constData(); 
   string smove = move.toUtf8().constData(); 
   string sseed = seed.toUtf8().constData();
@@ -166,12 +183,17 @@ void MainWindow::Start(){
   numScrambles = atoi(smove.c_str()); 
   Seed = atoi(sseed.c_str());
   
+  ///If the inputs from user are valid, then game is started, and central widget is changed into the puzzle board.
   if( (puzzleSize == 9 || puzzleSize == 16) && numScrambles > 0 && Seed != 0)  
   {
+    errorList->clear(); 
+    solutionList->clear();
+    delete pw;
     pw = new PuzzleWindow(puzzleSize, numScrambles, Seed); 
     pw->setParent(this);
     setCentralWidget(pw);
   } 
+  ///If not, then an error message will be shown in the message box.
   else if(!(puzzleSize == 9 || puzzleSize == 16))
   {
     errorList->clear();
@@ -194,7 +216,11 @@ void MainWindow::Start(){
   }
 }
 
+///Allows users to use A* to get the solution to the current puzzle board. 
+
 void MainWindow::Cheat(){
+
+  ///Detects whether the Manhattan heuristic or the Out of Place heuristic is chosen based on which radio button is checked.
   if(manbutton->isChecked() && (!(oopbutton->isChecked()))) 
   {
     manhattan(); 
@@ -208,6 +234,7 @@ void MainWindow::Cheat(){
     errorList->clear(); 
     errorList->setPlainText("Please select only one of the puzzle heuristics.");
   }
+  ///Cheat wont work unless the game has been started and one of the heuristic options is chosen.
   else if(startgame == false)
   {
     errorList->clear(); 
@@ -225,28 +252,52 @@ void MainWindow::Cheat(){
   }
 }
 
+///Quit game function
 void MainWindow::Quit(){ 
   exit(EXIT_FAILURE);
 }
 
-
+///Actual implementation for manhattan heuristic
 void MainWindow::manhattan() { 
+
+  ///Uses Puzzle Solver class and Puzzle Heuristic class to create the solution list that is then displayed in the solutionList widget.
   PuzzleSolver solver(*(pw->getBoard())); 
   PuzzleHeuristic* heur = new ManhattanHeuristic();
   solver.run(heur); 
+  solutionList->clear();
   for(int i = (solver.getSolution())->size(); i>0; i--)
   {
     solutionList->addItem(QString::number(solver.getSolution()->at(i-1)));  
   }
 }
 
+///Actual implementation for out of place heuristic
 void MainWindow::outofplace() { 
+
+  ///Uses Puzzle Solver class and Puzzle Heuristic class to create the solution list that is then displayed in the solutionList widget.
   PuzzleSolver solver(*(pw->getBoard())); 
   PuzzleHeuristic* heur = new OutOfPlaceHeuristic();
   solver.run(heur); 
+  solutionList->clear();
   for(int i = (solver.getSolution())->size(); i>0; i--)
   {
     solutionList->addItem(QString::number(solver.getSolution()->at(i-1))); 
+  }
+}
+
+///Makes sure that only one of the radio buttons can be selected at a time.
+void MainWindow::handleToggle() { 
+  if(oopbutton->isChecked())
+  {
+    oopbutton->setChecked(false);
+  }
+}
+
+///Makes sure that only one of the radio buttons can be selected at a time.
+void MainWindow::handleToggle1() {
+  if(manbutton->isChecked())
+  {
+    manbutton->setChecked(false);
   }
 }
 

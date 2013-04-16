@@ -11,11 +11,16 @@ using namespace std;
 
 GUITile::GUITile()
 {
+  tiletext = new QGraphicsSimpleTextItem();
 }
 
+///Constructor that creates a tile with indications to its parent, coordinates, size, and velocity.
 GUITile::GUITile(PuzzleWindow *cw, int tilenum, double nx, double ny, double w, double h, int vx, int vy ) :
+    ///Indicates position and size of the tile
     QGraphicsRectItem(nx, ny, w, h) {
+    ///sets the parent to be the puzzle window
     parent = cw;
+    ///initializes private variables
     tilenumber = tilenum;
     moving = false;
     x = nx;
@@ -24,6 +29,7 @@ GUITile::GUITile(PuzzleWindow *cw, int tilenum, double nx, double ny, double w, 
     height = h;
     velocityX = vx;
     velocityY = vy;
+    ///string stream needed to change int into a qstring
     ostringstream oss;
     oss << tilenum;
     string temp = oss.str();
@@ -31,15 +37,21 @@ GUITile::GUITile(PuzzleWindow *cw, int tilenum, double nx, double ny, double w, 
     tempchar[temp.size()] = 0;
     memcpy(tempchar, temp.c_str(), temp.size());
     QString str = tempchar;
+    ///Adds text to the tile
     tiletext = new QGraphicsSimpleTextItem(str, this);
+    ///Sets position
     tiletext->setPos(x + width/3, y + height/4);
+    ///Makes sure text is visible
     tiletext->setZValue(1);
     
+    ///set parent
     tiletext->setParentItem( this );
+    ///Color of tile is white
     QBrush whiteBrush(Qt::white);
     this->setBrush( whiteBrush );
 }
 
+///Destructor
 GUITile::~GUITile()
 {
     delete tiletext;
@@ -64,44 +76,6 @@ void GUITile::setVelocityX( int vx ) {
 void GUITile::setVelocityY( int vy ) {
     velocityY = vy;
 }
-
-/*void GUITile::move( int windowMaxX, int windowMaxY ) {
-    //We move by adding the velocity to the current position.
-    //Then we test whether we have reached the edge of our moving space
-    //If so, we reverse the velocity (y-velocity when we hit the top/bottom and
-    //x-velocity when we hit the left/right sides) and undo the position change
-    //that moved part of the rectangle off the screen.
-    x += velocityX;
-    y += velocityY;
-
-    if ( x < 0 ) {
-        velocityX = -velocityX;
-        x +=velocityX;
-    }
-
-    if ( y < 0 ) {
-        velocityY = -velocityY;
-        y +=velocityY;
-    }
-
-    if ( (x+width) > windowMaxX ) {
-         velocityX = -velocityX;
-         x+=velocityX;
-    }
-
-    if ( (y+height) > windowMaxY ) {
-         velocityY = -velocityY;
-         y+=velocityY;
-    }
-
-    //Everything is good. Update the QRectF that is actually displayed.
-    QPointF p( x, y );
-    QRectF r( rect() );
-    r.moveTo(p);
-    setRect( r );
-
-} */
-
 
 int GUITile::getX() const {
     return x;
@@ -146,6 +120,7 @@ void GUITile::mousePressEvent(QGraphicsSceneMouseEvent *)
     }
 }  
 
+///Copy Constructor
 GUITile& GUITile::operator=(const GUITile& rhs)
 {
     parent = rhs.getParent();
