@@ -187,7 +187,7 @@ void MainWindow::Start(){
     errorList->clear(); 
     errorList->setPlainText("Please enter a number for Seed"); 
   }
-  else  //shouldn't get here
+  else  
   {
     errorList->clear(); 
     errorList->setPlainText("One or more of your puzzle inputs are invalid"); 
