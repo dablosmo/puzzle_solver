@@ -194,8 +194,41 @@ void MainWindow::Start(){
   }
 }
 
+void MainWindow::Cheat(){
+  if(manbutton->isChecked() && (!(oopbutton->isChecked()))) 
+  {
+    manhattan(); 
+  } 
+  else if(oopbutton->isChecked() && (!(manbutton->isChecked())))
+  {
+    outofplace();
+  } 
+  else if(oopbutton->isChecked() && manbutton->isChecked()) //should never get here
+  {
+    errorList->clear(); 
+    errorList->setPlainText("Please select only one of the puzzle heuristics.");
+  }
+  else if(startgame == false)
+  {
+    errorList->clear(); 
+    errorList->setPlainText("Please start the game first");
+  }
+  else if((!(manbutton->isChecked())) && (!(oopbutton->isChecked()))) 
+  {
+    errorList->clear(); 
+    errorList->setPlainText("Please select one of the puzzle heuristics first.");
+  }
+  else  //shouldn't get here
+  {
+    errorList->clear(); 
+    errorList->setPlainText("One or more invalid inputs.");
+  }
+}
+
 void MainWindow::Quit(){ 
   exit(EXIT_FAILURE);
 }
+
+
 
 
