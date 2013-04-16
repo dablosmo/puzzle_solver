@@ -65,11 +65,8 @@ void PuzzleWindow::moveTile(GUITile *tile)
        QRectF r( tile->rect() );
        r.moveTo(p);
        tile->setRect( r );
-       QPointF p2( column*(TILE_WIDTH + X_SPACE) + UPPER_LEFT_X , row*(TILE_HEIGHT + Y_SPACE) + UPPER_LEFT_Y + (TILE_HEIGHT/2) );
-       QRectF r2( tile->getTiletext()->mapRectToParent( tile->rect() ) );
-       r2.moveTo(p);
-       tile->getTiletext()->update( r2 );
-       // tile->updateText();
+       QPointF p2( column*(TILE_WIDTH + X_SPACE) + UPPER_LEFT_X + TILE_WIDTH/3 , row*(TILE_HEIGHT + Y_SPACE) + UPPER_LEFT_Y + (TILE_HEIGHT/4) );
+       tile->getTiletext()->setPos( p2 );
        
     }
     catch (exception &e)
